@@ -187,8 +187,8 @@ def translate_zip(src_file, dst_file, driver, create_options=None, replace_nodat
       gdal_merge_options += " -a_nodata -9999"
       gdalwarp_options += " -dstnodata -9999"
     if compression:
-      gdal_merge_options += ' -co "COMPRESS=LZW" -co "PREDICTOR=2"'
-      gdalwarp_options += ' -co "COMPRESS=LZW" -co "PREDICTOR=2"'
+      gdal_merge_options += ' -co "COMPRESS=LZW" -co "PREDICTOR=2" -co "TILED=YES"'
+      gdalwarp_options += ' -co "COMPRESS=LZW" -co "PREDICTOR=2" -co "TILED=YES"'
     gdal_version = int(gdal.VersionInfo())
     re_non_ascii = re.compile(r"[^\x20-\x7E]")
     if gdal_version >= 1900 and re_non_ascii.search(src_file + dst_file) == None:
