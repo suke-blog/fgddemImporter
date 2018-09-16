@@ -22,7 +22,7 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 # DEALINGS IN THE SOFTWARE.
 
-script_version = "0.7"
+script_version = "0.7a"
 
 import sys, os
 import datetime
@@ -48,6 +48,7 @@ flush = sys.stdout.flush
 verbose = 0
 quiet = 0
 debug_mode = 0
+compression = 0
 
 
 def translate_jpgis_gml(text, dest_file, driver, create_options=None, replace_nodata_by_zero=False):
@@ -185,6 +186,9 @@ def translate_zip(src_file, dst_file, driver, create_options=None, replace_nodat
     if not replace_nodata_by_zero:
       gdal_merge_options += " -a_nodata -9999"
       gdalwarp_options += " -dstnodata -9999"
+    if compression:
+      gdal_merge_options += ' -co "COMPRESS=LZW" -co "PREDICTOR=2" -co "TILED=YES"'
+      gdalwarp_options += ' -co "COMPRESS=LZW" -co "PREDICTOR=2" -co "TILED=YES"'
     gdal_version = int(gdal.VersionInfo())
     re_non_ascii = re.compile(r"[^\x20-\x7E]")
     if gdal_version >= 1900 and re_non_ascii.search(src_file + dst_file) == None:
@@ -234,13 +238,13 @@ def unzip(src_file, dest=None):
 
 def Usage():
   print "=== Usage ==="
-  print "python fgddem.py [-replace_nodata_by_zero] [-f format] [-out_dir output_directory] [-q] [-v] src_files*\n"
+  print "python fgddem.py [-replace_nodata_by_zero] [-f format] [-out_dir output_directory] [-q] [-v] [-c] src_files*\n"
   print "src_files: The source file name(s). JPGIS(GML) DEM zip/xml files."
   return 0
 
 
 def main(argv=None):
-  global verbose, quiet, debug_mode
+  global verbose, quiet, debug_mode, compression
 
   format = "GTiff"
   filenames = []
@@ -266,6 +270,8 @@ def main(argv=None):
       verbose = 1
     elif arg == "-q":
       quiet = 1
+    elif arg == "-c":
+      compression = 1
     elif arg == "-debug":
       debug_mode = 1
     elif arg == "-help" or arg == "--help":
@@ -297,6 +303,12 @@ def main(argv=None):
     if verbose:
       print "Directory has been created: %s" % out_dir
 
+  # compression
+  if compression:
+    create_options = ['COMPRESS=LZW','PREDICTOR=2'];
+  else:
+    create_options = [];
+
   # get gdal driver
   driver = gdal.GetDriverByName(format)
   if driver is None:
@@ -324,10 +336,10 @@ def main(argv=None):
     # translate zip/xml file
     err = 0
     if ext == ".zip":
-      err = translate_zip(src_file, dst_file, driver, [], replace_nodata_by_zero)
+      err = translate_zip(src_file, dst_file, driver, create_options, replace_nodata_by_zero)
     elif ext == ".xml" and not "meta" in src_file:
       with open(src_file) as f:
-        err = translate_jpgis_gml(f.read(), dst_file, driver, [], replace_nodata_by_zero)
+        err = translate_jpgis_gml(f.read(), dst_file, driver, create_options, replace_nodata_by_zero)
     else:
       err = "Not supported file: %s" % src_file
 
