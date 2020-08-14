@@ -22,7 +22,7 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 # DEALINGS IN THE SOFTWARE.
 
-script_version = "0.7a"
+script_version = "0.7b"
 
 import sys, os
 import datetime
