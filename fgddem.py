@@ -162,7 +162,7 @@ def translate_zip(src_file, dst_file, driver, create_options=None, replace_nodat
     if name[-4:].lower() == ".xml" and not "meta" in name:
       tif_name = os.path.join(temp_dir, os.path.basename(name) + ".tif")
       with zf.open(name) as f:
-        translate_jpgis_gml(f.read(), tif_name, driver, create_options, replace_nodata_by_zero)
+        translate_jpgis_gml(f.read().decode("utf-8"), tif_name, driver, create_options, replace_nodata_by_zero)
       demlist.append(tif_name)
     if not quiet and not verbose:
       progress((i + 1.) / len(namelist))
