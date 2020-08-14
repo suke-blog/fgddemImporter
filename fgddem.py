@@ -130,15 +130,15 @@ def translate_jpgis_gml(text, dest_file, driver, create_options=None, replace_no
   dst_ds.FlushCache()
 
   if verbose:
-    print "file: %s" % dest_file
-    print "name: %s" % doc.getElementsByTagName("gml:name")[0].childNodes[0].data
-    print "fid : %s" % doc.getElementsByTagName("fid")[0].childNodes[0].data
-    print "type: %s" % doc.getElementsByTagName("type")[0].childNodes[0].data
-    print "mesh: %s" % doc.getElementsByTagName("mesh")[0].childNodes[0].data
-    print "bounds : %f, %f - %f, %f" % (lry, ulx, uly, lrx)
-    print "cell size : %f, %f" % (psize_x, psize_y)
-    print "size : %d, %d" % (xsize, ysize)
-    print "start point : %d, %d\n" % (startX, startY)
+    print("file: %s" % dest_file)
+    print("name: %s" % doc.getElementsByTagName("gml:name")[0].childNodes[0].data)
+    print("fid : %s" % doc.getElementsByTagName("fid")[0].childNodes[0].data)
+    print("type: %s" % doc.getElementsByTagName("type")[0].childNodes[0].data)
+    print("mesh: %s" % doc.getElementsByTagName("mesh")[0].childNodes[0].data)
+    print("bounds : %f, %f - %f, %f" % (lry, ulx, uly, lrx))
+    print("cell size : %f, %f" % (psize_x, psize_y))
+    print("size : %d, %d" % (xsize, ysize))
+    print("start point : %d, %d\n" % (startX, startY))
   return 0
 
 
@@ -211,16 +211,16 @@ def translate_zip(src_file, dst_file, driver, create_options=None, replace_nodat
 
     # do merge
     if not quiet:
-      print "merging"
+      print("merging")
       flush()
     if verbose:
-      print "execute %s" % merge_command
+      print("execute %s" % merge_command)
     os.system(merge_command)
 
   # remove temporary directory
   shutil.rmtree(temp_dir)
   if not quiet:
-    print "temporary files removed\n"
+    print("temporary files removed\n")
     flush()
   return 0
 
@@ -233,13 +233,13 @@ def unzip(src_file, dest=None):
     zf.extractall(dest)
     zf.close()
     if verbose:
-      print "unzipped : %s" % dest
+      print("unzipped : %s" % dest)
 
 
 def Usage():
-  print "=== Usage ==="
-  print "python fgddem.py [-replace_nodata_by_zero] [-f format] [-out_dir output_directory] [-q] [-v] [-c] src_files*\n"
-  print "src_files: The source file name(s). JPGIS(GML) DEM zip/xml files."
+  print("=== Usage ===")
+  print("python fgddem.py [-replace_nodata_by_zero] [-f format] [-out_dir output_directory] [-q] [-v] [-c] src_files*\n")
+  print("src_files: The source file name(s). JPGIS(GML) DEM zip/xml files.")
   return 0
 
 
@@ -278,7 +278,7 @@ def main(argv=None):
       Usage()
       return 0
     elif arg == "-version":
-      print "fgddem.py Version %s" % script_version
+      print("fgddem.py Version %s" % script_version)
       return 0
     elif arg[:1] == "-":
       return "Unrecognised command option: %s" % arg
@@ -291,8 +291,8 @@ def main(argv=None):
     i = i + 1
 
   if debug_mode:
-    print "args: %s" % " ".join(argv)
-    print "files: %s" % ",".join(filenames)
+    print("args: %s" % " ".join(argv))
+    print("files: %s" % ",".join(filenames))
 
   if len(filenames) == 0:
     return "No input files selected"
@@ -301,7 +301,7 @@ def main(argv=None):
   if out_dir and os.path.exists(out_dir) == False:
     os.makedirs(out_dir)
     if verbose:
-      print "Directory has been created: %s" % out_dir
+      print("Directory has been created: %s" % out_dir)
 
   # compression
   if compression:
@@ -318,9 +318,9 @@ def main(argv=None):
   for i, src_file in enumerate(filenames):
     if not quiet:
       if len(filenames) > 1:
-        print "(%d/%d): translating %s" % (i+1, len(filenames), src_file)
+        print("(%d/%d): translating %s" % (i+1, len(filenames), src_file))
       else:
-        print "translating " + src_file
+        print("translating " + src_file)
       flush()
 
     if out_dir:
@@ -348,7 +348,7 @@ def main(argv=None):
       err_count += 1
 
   if not quiet and err_count == 0:
-    print "completed"
+    print("completed")
   return 0
 
 
